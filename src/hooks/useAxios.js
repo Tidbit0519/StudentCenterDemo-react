@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const baseURL = "http://localhost:5287/api/Student/GetAllStudents";
+export default function useAxios(url) {
+	const [data, setData] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
-export default function useAxios () {
-	const [ data, setData ] = useState();
 	useEffect(() => {
-		axios.get(baseURL).then((response) => {
-			setData(response.data);
-		});
-	}, []);
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(url);
+				setData(response.data);
+				setLoading(false);
+			} catch (err) {
+				setError(err);
+				setLoading(false);
+			}
+		};
 
-	return data;
+		fetchData();
+	}, [url]);
+
+	return { data, loading, error };
 }
