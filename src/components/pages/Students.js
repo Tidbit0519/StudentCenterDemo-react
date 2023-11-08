@@ -1,35 +1,50 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
+import { useState } from "react";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+	IconButton,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-import useAxios from "../../hooks/useAxios";
+import { useGetRequest } from "../../hooks/useAxios";
 import StudentFormPopUp from "./students/StudentFormPopUp";
 
 const getAllStudentsURL = "http://localhost:5287/api/Student/GetAllStudents";
 
 export default function Students() {
 	const [open, setOpen] = React.useState(false);
-
+	const [idToFetch, setIdToFetch] = useState("");
+	
+	const { getData, getLoading, getError } = useGetRequest(getAllStudentsURL);
+	
+	
 	const handleClickOpen = () => {
-		setOpen(!open);
-		console.log(open);
+		setOpen(true);
 	};
 
 	const handleClose = () => {
-		setOpen(!open);
-		console.log(open);
+		setOpen(false);
 	};
-
-	const { data, loading, error } = useAxios(getAllStudentsURL);
-
+	
+	function handleFetchData(setId) {
+		setIdToFetch(setId);
+		handleClickOpen();
+	}
+	
 	return (
 		<div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
 			<div>
 				<h1>Students page</h1>
-				{loading ? (
+				{getLoading ? (
 					<p>Loading...</p>
-				) : error ? (
-					<p>Error: {error.message}</p>
+				) : getError ? (
+					<p>Error: {getError.message}</p>
 				) : (
 					<TableContainer component={Paper} sx={{ minWidth: "60vw" }}>
 						<Table aria-label="simple table">
@@ -42,7 +57,7 @@ export default function Students() {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.map((student) => (
+								{getData.map((student) => (
 									<TableRow key={student.studentId}>
 										<TableCell component="th" scope="row">
 											{student.studentId}
@@ -50,8 +65,8 @@ export default function Students() {
 										<TableCell align="left">{student.firstName}</TableCell>
 										<TableCell align="left">{student.lastName}</TableCell>
 										<TableCell align="center">
-											<IconButton onClick={handleClickOpen}>
-												<EditIcon/>
+											<IconButton onClick={() => handleFetchData(student.studentId)}>
+												<EditIcon />
 											</IconButton>
 										</TableCell>
 									</TableRow>
@@ -60,7 +75,9 @@ export default function Students() {
 						</Table>
 					</TableContainer>
 				)}
-				<StudentFormPopUp open={open} onClose={handleClose} />
+
+				{/* Form pop up */}
+				<StudentFormPopUp open={open} handleClose={handleClose} idToFetch={idToFetch}/>
 			</div>
 		</div>
 	);
