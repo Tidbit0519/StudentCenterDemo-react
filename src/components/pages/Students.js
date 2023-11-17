@@ -18,24 +18,18 @@ import StudentFormPopUp from "./students/StudentFormPopUp";
 const getAllStudentsURL = "http://localhost:5287/api/Student/GetAllStudents";
 
 export default function Students() {
-	const [open, setOpen] = React.useState(false);
-	const [idToFetch, setIdToFetch] = useState("");
-	
+	const [open, setOpen] = useState(false);
+	const [selectedStudent, setSelectedStudent] = useState({});
 	const { getData, getLoading, getError } = useGetRequest(getAllStudentsURL);
 	
-	
-	const handleClickOpen = () => {
+	const handleClickOpen = (student) => {
+		setSelectedStudent(student);
 		setOpen(true);
 	};
 
 	const handleClose = () => {
 		setOpen(false);
 	};
-	
-	function handleFetchData(setId) {
-		setIdToFetch(setId);
-		handleClickOpen();
-	}
 	
 	return (
 		<div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
@@ -65,7 +59,7 @@ export default function Students() {
 										<TableCell align="left">{student.firstName}</TableCell>
 										<TableCell align="left">{student.lastName}</TableCell>
 										<TableCell align="center">
-											<IconButton onClick={() => handleFetchData(student.studentId)}>
+											<IconButton onClick={() => handleClickOpen(student)}>
 												<EditIcon />
 											</IconButton>
 										</TableCell>
@@ -76,8 +70,7 @@ export default function Students() {
 					</TableContainer>
 				)}
 
-				{/* Form pop up */}
-				<StudentFormPopUp open={open} handleClose={handleClose} idToFetch={idToFetch}/>
+				<StudentFormPopUp open={open} handleClose={handleClose} studentData={selectedStudent}/>
 			</div>
 		</div>
 	);

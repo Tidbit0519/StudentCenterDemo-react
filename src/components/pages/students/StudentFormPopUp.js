@@ -1,12 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
-import { useGetByIdRequest } from "../../../hooks/useAxios";
 
-const getStudentByIdURL = "http://localhost:5287/api/Student/GetStudentById";
 
-export default function StudentFormPopUp({ open, handleClose, idToFetch }) {
-	const { getByIdData } = useGetByIdRequest(getStudentByIdURL, idToFetch);
+export default function StudentFormPopUp({ open, handleClose, studentData }) {
 
 	return (
 		<Dialog open={open} onClose={handleClose}>
@@ -18,7 +15,7 @@ export default function StudentFormPopUp({ open, handleClose, idToFetch }) {
 					type="text"
 					fullWidth
 					variant="standard"
-					defaultValue={getByIdData ? getByIdData.firstName : ""}
+					defaultValue={studentData ? studentData.firstName : ""}
 				/>
 				<TextField
 					id="lastname"
@@ -27,7 +24,7 @@ export default function StudentFormPopUp({ open, handleClose, idToFetch }) {
 					fullWidth
 					variant="standard"
 					margin="normal"
-					defaultValue={getByIdData ? getByIdData.lastName : ""}
+					defaultValue={studentData ? studentData.lastName : ""}
 				/>
 
 			</DialogContent>
