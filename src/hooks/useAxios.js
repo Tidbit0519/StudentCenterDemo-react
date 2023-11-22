@@ -25,7 +25,6 @@ function useGetRequest(url) {
 }
 
 function useGetByIdRequest(url, id) {
-	console.log("getting student by ID");
 	const [getByIdData, setGetByIdData] = useState(null);
 	const [getByIdLoading, setGetByIdLoading] = useState(true);
 	const [getByIdError, setGetByIdError] = useState(null);
@@ -68,16 +67,19 @@ function usePostRequest() {
 	return { postData, postLoading, postError, sendPostRequest };
 }
 
-function usePutRequest() {
+function usePutRequest(url, id, data) {
+	console.log("calling PUT...");
 	const [putData, setPutData] = useState(null);
 	const [putLoading, setPutLoading] = useState(false);
 	const [putError, setPutError] = useState(null);
   
-	const sendPutRequest = async (url, id, putData) => {
+	const sendPutRequest = async () => {
 		setPutLoading(true);
 		try {
-			const response = await axios.put(`${url}/${id}`, putData);
+			const response = await axios.put(`${url}/${id}`, data);
 			setPutData(response.data);
+			console.log(id);
+			console.log(data);
 		} catch (error) {
 			setPutError(error);
 		} finally {
