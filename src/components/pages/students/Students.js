@@ -87,7 +87,7 @@ export default function Students() {
 					</Stack>
 				)}
 
-				<StudentFormPopUp open={open} action={action} handleClose={handleClose} studentData={selectedStudent}/>
+				<StudentFormPopUp open={open} action={action} handleClose={handleClose} student={selectedStudent}/>
 			</div>
 		</div>
 	);
