@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import {
 	Table,
 	TableBody,
@@ -14,11 +14,13 @@ import {
 } from "@mui/material";
 import  EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import { Delete } from "@mui/icons-material";
 
 import { useGetRequest } from "../../../hooks/useAxios";
 import StudentFormPopUp from "./StudentFormPopUp";
 
 const getAllStudentsURL = "http://localhost:5287/api/Student/GetAllStudents";
+const deleteUrl = "http://localhost:5287/api/Student/DeleteStudentById";
 
 export default function Students() {
 	const [open, setOpen] = useState(false);
@@ -39,6 +41,17 @@ export default function Students() {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+	const handleDelete = (id) => {
+		axios.delete(`${deleteUrl}/${id}`)
+			.then(() => {
+				window.location.reload();
+			})
+			.catch((error) => {
+				throw error;
+			});
+	};
+
 	
 	return (
 		<div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
@@ -56,7 +69,7 @@ export default function Students() {
 							</Button>
 						</Stack>
 						
-						<TableContainer component={Paper} sx={{ minWidth: "60vw" }}>
+						<TableContainer component={Paper} sx={{ minWidth: "40vw" }}>
 							<Table aria-label="simple table">
 								<TableHead>
 									<TableRow>
@@ -74,10 +87,15 @@ export default function Students() {
 											</TableCell>
 											<TableCell align="left">{student.firstName}</TableCell>
 											<TableCell align="left">{student.lastName}</TableCell>
-											<TableCell align="center">
-												<IconButton onClick={() => handleClickOpen("edit", student)}>
-													<EditIcon />
-												</IconButton>
+											<TableCell align="right">
+												<Stack direction="row" spacing={2} justifyContent="center">
+													<IconButton onClick={() => handleClickOpen("edit", student)}>
+														<EditIcon />
+													</IconButton>
+													<IconButton onClick={() => handleDelete(student.studentId)}>
+														<Delete />
+													</IconButton>
+												</Stack>
 											</TableCell>
 										</TableRow>
 									))}
