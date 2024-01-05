@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 
-const postUrl = "http://localhost:5287/api/Student/CreateNewStudent";
 const putUrl = "http://localhost:5287/api/Student/UpdateStudentById";
 
-export default function StudentFormPopUp({ open, action, handleClose, student }) {
+export default function StudentFormPopUp({ open, action, handleClose, student, addStudent }) {
 	const [data, setData] = useState({
 		id: "",
 		firstName: "",
@@ -31,8 +30,7 @@ export default function StudentFormPopUp({ open, action, handleClose, student })
 		});
 	};
 
-	const handleSubmit = (e) => {
-		console.log(data);
+	const handlePostApiCall = (e) => {
 		e.preventDefault();
 		const student = [
 			{
@@ -40,17 +38,11 @@ export default function StudentFormPopUp({ open, action, handleClose, student })
 				lastName: data.lastName,
 			}
 		];
-		axios.post(postUrl, student)
-			.then(() => {
-				window.location.reload();
-			})
-			.catch((error) => {
-				throw error;
-			});
+		addStudent(student);
 		handleClose();
 	};
 
-	const handleUpdate = (e) => {
+	const handleUpdateApiCall = (e) => {
 		e.preventDefault();
 		const student = {
 			firstName: data.firstName,
@@ -92,7 +84,7 @@ export default function StudentFormPopUp({ open, action, handleClose, student })
 				/>
 			</DialogContent>
 			<DialogActions>
-				<Button color="primary" onClick={action == "add" ? handleSubmit : handleUpdate}>
+				<Button color="primary" onClick={action == "add" ? handlePostApiCall : handleUpdateApiCall}>
 					Submit
 				</Button>
 				<Button onClick={handleClose}>Close</Button>

@@ -28,7 +28,9 @@ export default function NavBar () {
 							letterSpacing: ".1rem"
 						}}
 					>
-            Student Center Demo |
+						<Button variant="text" href="/" sx={{ color: "white", fontSize: "large", fontWeight: "bold"}}>
+							Student Center Demo
+						</Button>
 					</Typography>
 
 					<Menu
@@ -57,6 +59,7 @@ export default function NavBar () {
 							<Button
 								key={page}
 								sx={{ my: 2, color: "white", display: "block" }}
+								href={`/${page.toLowerCase()}`}
 							>
 								{page}
 							</Button>

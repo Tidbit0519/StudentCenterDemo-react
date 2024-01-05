@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Dashboard from "./components/dashboard/Dashboard";
 import Students from "./components/pages/students/Students";
-import Professors from "./components/pages/Professor";
+import Professors from "./components/pages/professors/Professors";
 import Courses from "./components/pages/Courses";
 import Grades from "./components/pages/Grades";
 
